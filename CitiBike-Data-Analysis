@@ -1,7 +1,6 @@
 /* All Data is gathered off CitiBike NYC website and is for research purposes only
 https://ride.citibikenyc.com/system-data */
 
-
 select count distinct(*)
 from citibike_2019
 
@@ -387,3 +386,305 @@ from cb_dec_2022_nyc
 
 select count (*)
 from public.all_nyc_raw_data_2022
+--30689921 rows of data
+
+--Datacheck count all by month
+SELECT DATE_PART('month', started_at) AS date_Month, COUNT (*)
+FROM public.all_nyc_raw_data_2022
+GROUP BY 1
+order by 1 
+
+--Create all tables with 2022 downloaded jersey city citybike data
+
+create table cb_jan_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+)
+
+copy cb_jan_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202201-citibike-tripdata.csv' delimiter ',' csv header
+
+create table cb_feb_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_feb_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202202-citibike-tripdata.csv' delimiter ',' csv header;
+
+create table cb_mar_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_mar_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202203-citibike-tripdata.csv' delimiter ',' csv header;
+
+create table cb_apr_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_apr_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202204-citibike-tripdata.csv' delimiter ',' csv header;
+
+create table cb_may_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_may_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202205-citibike-tripdata.csv' delimiter ',' csv header;
+
+create table cb_jun_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_jun_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202206-citibike-tripdata.csv' delimiter ',' csv header;
+
+create table cb_jul_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_jul_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202207-citbike-tripdata.csv' delimiter ',' csv header;
+
+create table cb_aug_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_aug_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202208-citibike-tripdata.csv' delimiter ',' csv header;
+
+create table cb_sep_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_sep_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202209-citibike-tripdata.csv' delimiter ',' csv header;
+
+create table cb_oct_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_oct_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202210-citibike-tripdata.csv' delimiter ',' csv header;
+
+create table cb_nov_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_nov_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202211-citibike-tripdata.csv' delimiter ',' csv header;
+
+create table cb_dec_2022_jc(
+ride_id text PRIMARY KEY,
+rideable_type text,
+started_at timestamp,
+ended_at timestamp,
+start_station_name text,
+start_station_id text,
+end_station_name text,
+end_station_id text,
+start_lat numeric,
+start_lng numeric,
+end_lat numeric, 
+end_lng numeric,
+member_casual text
+);
+
+copy cb_dec_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, 
+					  end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+)
+from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202212-citibike-tripdata.csv' delimiter ',' csv header;
+
+select *
+from public.all_nyc_raw_data_2022
+union all
+select *
+from public.cb_jan_2022_jc
+union all
+select *
+from public.cb_feb_2022_jc
+union all
+select *
+from public.cb_mar_2022_jc
+union all
+select *
+from public.cb_apr_2022_jc
+union all
+select *
+from public.cb_may_2022_jc
+union all
+select *
+from public.cb_jun_2022_jc
+union all
+select *
+from public.cb_jul_2022_jc
+union all
+select *
+from public.cb_aug_2022_jc
+union all
+select *
+from public.cb_sep_2022_jc
+union all
+select *
+from public.cb_oct_2022_jc
+union all
+select *
+from public.cb_nov_2022_jc
+union all
+select *
+from public.cb_dec_2022_jc;
+
+--result = 31585406 rows affected
