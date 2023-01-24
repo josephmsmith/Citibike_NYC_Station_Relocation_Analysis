@@ -77,17 +77,20 @@ from citibike_2016
 ) t1
 
 /* Querys below create tables and pull from locally stored zip files downloaded from CitiBike website 
-Goal is to create one large raw data table to be used in conjunction with previous years of data 
+Goal is to create two large raw data table to be used in conjunction with 2019 data
 
 --DATABASE creation process--
---create table change cb_MONTH_YYYY_NYC
+--create table change cb_MONTH_YYYY_jc
 --import csv files from citibike
 --took headers from CSV file, transposed in excel, 
 --pasted code, added data type manually
 --saved new month table as cb_MON_YYYY_cleaned
 --unioned all tables into a single 2022 table = cb_2022_ALL */
 
-			
+--===================================
+--Create all tables (import from files)
+
+
 --create jan table		
 create table cb_jan_2022_NYC(
 ride_id text PRIMARY KEY,
@@ -393,8 +396,9 @@ SELECT DATE_PART('month', started_at) AS date_Month, COUNT (*)
 FROM public.all_nyc_raw_data_2022
 GROUP BY 1
 order by 1 
-
+--=================================================================
 --Create all tables with 2022 downloaded jersey city citybike data
+--=================================================================
 
 create table cb_jan_2022_jc(
 ride_id text PRIMARY KEY,
@@ -648,9 +652,12 @@ copy cb_dec_2022_jc(ride_id, rideable_type, started_at, ended_at, start_station_
 )
 from 'C:\Users\18587\OneDrive\Desktop\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC-202212-citibike-tripdata.csv' delimiter ',' csv header;
 
-select *
-from public.all_nyc_raw_data_2022
-union all
+
+
+--============================================================================
+/*  create new jersey city only table*/
+
+create table jc_raw_data_2022 as 
 select *
 from public.cb_jan_2022_jc
 union all
@@ -687,4 +694,169 @@ union all
 select *
 from public.cb_dec_2022_jc;
 
---result = 31585406 rows affected
+
+
+
+
+--======================================================================================
+/*NORMALIZE ALL DATA FROM JC_DATA_2022 TO MATCH GA SERVER */
+
+ALTER TABLE table_name RENAME COLUMN old_name TO new_name;  --Change the column name
+ALTER TABLE table_name												   --Change the column type
+	ALTER COLUMN column_name [SET DATA] TYPE new_data_type;
+
+ALTER TABLE public.jc_raw_data_2022 RENAME started_at TO start_time;
+ALTER TABLE public.jc_raw_data_2022 RENAME ended_at TO stop_time;
+ALTER TABLE public.jc_raw_data_2022 RENAME member_casual TO user_type;
+ALTER TABLE public.jc_raw_data_2022 ADD COLUMN birth_year INT;
+ALTER TABLE public.jc_raw_data_2022 ADD COLUMN gender INT;
+ALTER TABLE public.jc_raw_data_2022 ADD COLUMN bike_id INT;
+
+ALTER TABLE public.jc_raw_data_2022												   
+	ALTER COLUMN start_station_id TYPE int;
+	
+SELECT *
+FROM public.citibike_2019
+
+
+--======================================================================================
+--Need to re-import 2019 data from GA server
+--======================================================================================
+
+--create 2019 table
+create table preunionjc_raw_data_2019(
+start_time timestamp,
+stop_time timestamp,
+start_station_id int,
+end_station_id int,
+bike_id int,
+user_type text,
+birth_year int,
+gender int
+);
+
+copy preunionjc_raw_data_2019 (start_time, stop_time, start_station_id, end_station_id, bike_id, user_type, birth_year, gender)
+from 'C:\Users\18587\OneDrive\Documents\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC_CityBike_2019_Data_GA.csv' delimiter ',' csv header;
+
+--create station table
+create table preunionGA_jc_raw_data_2019(
+id int,
+latitude numeric,
+longitude numeric,
+name text,
+docks int);
+
+copy preunionGA_jc_raw_data_2019 (id, latitude, longitude, name, docks)
+from 'C:\Users\18587\OneDrive\Documents\Data Analytics Immersive\Week 4\2022 Citibike Data\2022 Extracted\JC_citibike_Stations_GASERVER.csv' delimiter ',' csv header;
+
+with 
+t1 as (
+	select start_station_name as list_2022_names
+	from public.jc_raw_data_2022
+),
+t2 as (
+	select name as list_2019_names
+	from public.preunionga_jc_raw_data_2019
+) 
+select t1.list_2022_names, t2.list_2019_names
+from t1,t2
+order by 1,2 asc
+
+--create jc cleaned table
+/*create table jc_raw_data_2022(
+start_time timestamp,
+stop_time timestamp,
+start_station_id int,
+end_station_id int,
+bike_id int,
+user_type text,
+birth_year int,
+gender int,
+id int,
+latitude numeric,
+longitude numeric,
+name text,
+docks int); */
+
+
+select *
+from public.preunionjc_raw_data_2019 b
+	join public.preunionga_jc_raw_data_2019 a
+	on b.start_station_id= a.id 
+limit 100
+
+
+create view all_data_2022 as
+select concat(bike_id,'-',ride_id) as identifier,start_time,stop_time,start_station_name,start_lat,
+	start_lng,end_station_name,end_lat,end_lng,user_type
+from public.jc_raw_data_2022
+
+
+
+create view all_data_2019 as	
+select concat(c.bike_id,'-',ece.id) as identifier, c.start_time,c.stop_time, 
+	ecs.name start_name, ecs.latitude start_latitude, ecs.longitude start_longitude, -- starting
+	ece.name end_name, ece.latitude end_latitude, ece.longitude end_longitude,
+	c.user_type-- ending
+from public.preunionjc_raw_data_2019 c
+	join public.preunionga_jc_raw_data_2019 ecs -- station copy 1 -- ecs
+	on c.start_station_id = ecs.id
+	join public.preunionga_jc_raw_data_2019 ece -- stations copy 2 -- ece
+	on c.end_station_id = ece.id
+																																			
+
+--======================================================================================
+--ANALYSIS
+--======================================================================================
+
+--How has total ridership changed in Jersey city in 2022?
+
+select count(*)
+from public.jc_raw_data_2022;
+
+--895,485 total rides
+
+--what is the breakdown of subscribers v users?
+
+SELECT COUNT(*),
+	(SELECT count(*)
+	 from public.jc_raw_data_2022
+	 where member_casual ilike 'member')
+	 as member_num,
+	 (select count(*)
+	 from public.jc_raw_data_2022
+	 where member_casual ilike 'casual')
+	 as casual_num
+from public.jc_raw_data_2022
+
+with
+t1 as (
+	select count(*) as NumA
+	 from public.jc_raw_data_2022
+	 where member_casual ilike 'member'
+),
+t2 as (select count(*) as NumB
+	 from public.jc_raw_data_2022
+	 where member_casual ilike 'casual'
+),
+t3 as (
+	select count(*) as numc
+	from public.jc_raw_data_2022	   
+				   )
+SELECT numc, ROUND(T1.NumA::numeric / T3.Numc::numeric * 100,2) as MemPCT,
+			ROUND(T2.Numb::numeric / T3.Numc::numeric * 100,2) as CasPCT
+from t1,t2,t3
+
+--JC 2022 out of 895,485 rides 65.75% were members and 34.25% were casual
+
+Select end_station_name, count(*)
+from public.jc_raw_data_2022
+group by 1
+order by 2 desc
+
+select count (*)
+from public.all_data_2019
+where start_time is null
+
+
+
