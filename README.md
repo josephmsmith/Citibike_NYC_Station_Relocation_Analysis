@@ -1,5 +1,5 @@
 # Citibike NYC Station Relocation Analysis 
-Data analysis from Citibike NYC. Analyzed in PostgreSQL and Tableau. 
+Data analysis from Citibike NYC. Analyzed in PostgreSQL and Tableau. Full presentation is located [HERE](https://public.tableau.com/app/profile/josephmsmith/viz/Citibike_Post-Covid_Analysis/CitibikeAnalysis) in Tableau Public
 
 ## Introduction
 The purpose of the Bike Share Expansion Program is to evaluate the current routes based on popularity, identify population centers and destination attractions, for both amusement and employment bikesharing and add stations in growing locations. The presentation is geared towards Citibike executives to understand how their current landscape has changed over the last 4 years and how to pivot in order to remain successful.
